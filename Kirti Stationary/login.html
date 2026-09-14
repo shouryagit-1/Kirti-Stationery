@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Login — Kirti Stationary</title>
+  <meta name="description" content="Shop owner portal login for Kirti Stationary catalog management.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .login-page-wrapper {
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #FAF1F3 0%, #FFFFFF 50%, #F4E7E9 100%);
+    }
+
+    .login-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 10px 30px rgba(111, 111, 111, 0.1);
+      position: relative;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-logo {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 14px;
+      display: block;
+    }
+
+    .login-title {
+      font-family: var(--font-heading);
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--charcoal-dark);
+      margin-bottom: 6px;
+    }
+
+    .login-subtitle {
+      font-size: 0.88rem;
+      color: var(--charcoal-gray);
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--charcoal-dark);
+    }
+
+    .form-control-wrap {
+      position: relative;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      background-color: var(--body-bg);
+      color: var(--charcoal-dark);
+      transition: all var(--transition-fast);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--dusty-pink);
+      background-color: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(215, 177, 183, 0.25);
+    }
+
+    .btn-toggle-pass {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--charcoal-gray);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .login-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      color: var(--charcoal-gray);
+    }
+
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .btn-submit-login {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      margin-top: 6px;
+    }
+
+    .login-alert {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.86rem;
+      margin-bottom: 16px;
+      display: none;
+      background-color: #FDEDED;
+      color: #B71C1C;
+      border: 1px solid #FFCDD2;
+    }
+
+
+    .back-store-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      font-size: 0.86rem;
+      color: var(--charcoal-gray);
+      justify-content: center;
+      width: 100%;
+    }
+
+    .back-store-link:hover {
+      color: var(--dusty-pink-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimal Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-link">
+        <img src="assets/images/logo.svg" alt="KS Monogram Logo" class="brand-logo-img" width="46" height="46">
+        <div class="brand-info">
+          <span class="brand-title">Kirti Stationary</span>
+          <span class="brand-tagline">Shop Owner Portal</span>
+        </div>
+      </a>
+      <a href="index.html" class="btn btn-secondary btn-sm">← Back to Store</a>
+    </div>
+  </header>
+
+  <main class="login-page-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <img src="assets/images/logo.svg" alt="KS Logo" class="login-logo">
+        <h1 class="login-title">Shop Owner Login</h1>
+        <p class="login-subtitle">Sign in to add, edit, or remove store products.</p>
+      </div>
+
+      <!-- Error Alert -->
+      <div id="login-alert" class="login-alert" role="alert"></div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="login-form" novalidate>
+        <div class="form-group">
+          <label for="username" class="form-label">Username</label>
+          <div class="form-control-wrap">
+            <input type="text" id="username" class="form-control" placeholder="Enter owner username" required autocomplete="username" autofocus>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="form-control-wrap">
+            <input type="password" id="password" class="form-control" placeholder="Enter owner password" required autocomplete="current-password">
+            <button type="button" id="btn-toggle-pass" class="btn-toggle-pass" aria-label="Toggle password visibility">Show</button>
+          </div>
+        </div>
+
+        <div class="login-options">
+          <label class="remember-label">
+            <input type="checkbox" id="remember-me" checked>
+            <span>Stay logged in</span>
+          </label>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn btn-primary btn-submit-login">
+          Sign In to Dashboard →
+        </button>
+      </form>
+
+
+      <a href="index.html" class="back-store-link">
+        ← Back to customer storefront
+      </a>
+
+      <div style="text-align: center; margin-top: 20px; font-size: 0.78rem; color: var(--charcoal-gray);">
+        Website designed &amp; created by <strong style="color: var(--charcoal-dark);">Shourya Srivastava</strong>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in, redirect to dashboard
+      redirectIfAuthenticated();
+
+      const form = document.getElementById('login-form');
+      const userInput = document.getElementById('username');
+      const passInput = document.getElementById('password');
+      const rememberInput = document.getElementById('remember-me');
+      const alertBox = document.getElementById('login-alert');
+      const togglePassBtn = document.getElementById('btn-toggle-pass');
+
+      // Toggle password visibility
+      if (togglePassBtn) {
+        togglePassBtn.addEventListener('click', () => {
+          const isPassword = passInput.type === 'password';
+          passInput.type = isPassword ? 'text' : 'password';
+          togglePassBtn.textContent = isPassword ? 'Hide' : 'Show';
+        });
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alertBox.style.display = 'none';
+
+        const username = userInput.value;
+        const password = passInput.value;
+        const remember = rememberInput ? rememberInput.checked : false;
+
+        const result = login(username, password, remember);
+
+        if (result.success) {
+          window.location.href = 'dashboard.html';
+        } else {
+          alertBox.textContent = result.error || 'Invalid credentials.';
+          alertBox.style.display = 'block';
+          passInput.focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
