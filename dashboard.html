@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Dashboard — Kirti Stationary</title>
+  <meta name="description" content="Shop owner portal to add, edit, and manage products for Kirti Stationary.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <!-- Dashboard Top Header -->
+  <header class="dashboard-header">
+    <div class="dashboard-header-inner">
+      <div class="dashboard-brand">
+        <a href="index.html" title="View Customer Storefront" style="display:flex; align-items:center; gap:10px;">
+          <img src="assets/images/logo.svg" alt="KS Logo" class="brand-logo-img" width="44" height="44">
+          <div>
+            <span class="brand-title" style="font-size:1.25rem;">Kirti Stationary</span>
+            <span class="dashboard-badge-pill">Shop Owner Mode</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="dashboard-user-actions">
+        <a href="index.html" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">
+          👁️ View Live Store ↗
+        </a>
+        <button type="button" id="btn-logout" class="btn-logout" title="Sign out of Owner Portal">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard View -->
+  <main class="dashboard-main">
+
+    <!-- Welcome & Quick Stats Banner -->
+    <section class="welcome-card" aria-label="Store Overview">
+      <div class="welcome-text">
+        <h1>Welcome, Store Owner! 👋</h1>
+        <p>Manage your stationery catalog easily. All changes update instantly on your store.</p>
+      </div>
+
+      <div class="stats-group">
+        <div class="stat-item">
+          <div class="stat-value" id="stat-total-products">0</div>
+          <div class="stat-label">Products Listed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-total-categories">0</div>
+          <div class="stat-label">Categories</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Bar -->
+    <section class="dashboard-action-bar" aria-label="Catalog Actions">
+      <div class="action-bar-left">
+        <button type="button" id="btn-add-new-product" class="btn btn-primary">
+          <span style="font-size:1.2rem; line-height:1;">+</span>
+          <span>Add New Product</span>
+        </button>
+
+        <div class="dashboard-search-box">
+          <span class="icon">🔍</span>
+          <input type="text" id="dashboard-search" placeholder="Search catalog items..." aria-label="Search dashboard products">
+        </div>
+      </div>
+
+      <div class="action-bar-right">
+        <button type="button" id="btn-upi-settings" class="btn btn-secondary btn-sm" title="Configure UPI Payment details">
+          ⚙️ UPI Settings
+        </button>
+        <button type="button" id="btn-reset-catalog" class="btn btn-secondary btn-sm" title="Restore sample catalog items">
+          🔄 Reset Default Catalog
+        </button>
+      </div>
+    </section>
+
+    <!-- Products Table -->
+    <section class="table-container" aria-label="Product Catalog List">
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Product Name &amp; Details</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="products-table-body">
+          <!-- Populated by js/dashboard.js -->
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- ADD / EDIT PRODUCT MODAL -->
+  <div class="modal-backdrop" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Add New Stationery Product</h2>
+        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <form id="product-form">
+        <input type="hidden" id="form-product-id">
+
+        <div class="modal-body">
+          <!-- 1. Photo Upload -->
+          <div class="form-group">
+            <label class="form-label">1. Product Photo</label>
+            <div class="image-upload-container">
+              <div class="image-preview-box">
+                <img id="preview-img" class="image-preview-img" src="" alt="Photo Preview">
+                <span id="preview-placeholder" class="image-preview-placeholder">No photo selected</span>
+              </div>
+              <div class="image-upload-controls">
+                <label for="form-product-image-file" class="btn-upload-file">
+                  📷 Choose Photo from Computer / Phone
+                </label>
+                <input type="file" id="form-product-image-file" class="file-input-hidden" accept="image/*">
+                
+                <span style="font-size:0.75rem; color:var(--charcoal-gray);">Or pick a matching sample stationery photo:</span>
+                <div class="sample-photos-row">
+                  <button type="button" class="sample-photo-btn" data-img="assets/images/notebook.jpg">Notebook</button>
+                  <button type="button" class="sample-photo-btn" data-img="assets/images/pens.jpg">Gel Pens</button>
+                  <button type="button" class="sample-photo-btn" data-img="assets/images/watercolors.jpg">Paints</button>
+                  <button type="button" class="sample-photo-btn" data-img="assets/images/stickynotes.jpg">Sticky Notes</button>
+                  <button type="button" class="sample-photo-btn" data-img="assets/images/geometry.jpg">Geometry Box</button>
+                  <button type="button" class="sample-photo-btn" data-img="assets/images/planner.jpg">Planner</button>
+                  <button type="button" class="sample-photo-btn" data-img="assets/images/organizer.jpg">Desk Stand</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Product Name -->
+          <div class="form-group">
+            <label for="form-product-name" class="form-label">2. Product Name</label>
+            <input type="text" id="form-product-name" class="form-control" placeholder="e.g. Apsara Platinum Extra Dark Pencils (Pack of 10)" required>
+          </div>
+
+          <!-- 3. Category -->
+          <div class="form-group">
+            <label for="form-product-category" class="form-label">3. Category</label>
+            <select id="form-product-category" class="form-control">
+              <option value="Notebooks &amp; Registers">Notebooks &amp; Registers</option>
+              <option value="Pens &amp; Writing">Pens &amp; Writing</option>
+              <option value="Art &amp; Craft">Art &amp; Craft</option>
+              <option value="School &amp; Office">School &amp; Office</option>
+              <option value="Geometry &amp; Math">Geometry &amp; Math</option>
+              <option value="Planners &amp; Diaries">Planners &amp; Diaries</option>
+              <option value="Desk Accessories">Desk Accessories</option>
+              <option value="General Stationery">General Stationery</option>
+            </select>
+          </div>
+
+          <!-- 4. Price in ₹ -->
+          <div class="form-group">
+            <label for="form-product-price" class="form-label">4. Price (in Rupees ₹)</label>
+            <input type="number" id="form-product-price" class="form-control" placeholder="e.g. 150" min="0" step="1" required>
+          </div>
+
+          <!-- 5. Short Description -->
+          <div class="form-group">
+            <label for="form-product-desc" class="form-label">5. Short Description (Friendly and simple)</label>
+            <textarea id="form-product-desc" class="form-control" rows="3" placeholder="e.g. Premium smooth writing pencils with eraser and sharpener included. Ideal for school exams and everyday sketching."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="modal-save-btn">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div class="modal-backdrop" id="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+    <div class="modal-card" style="max-width:440px;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="delete-modal-title" style="color:#C62828;">Remove Product?</h2>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.95rem; color:var(--charcoal-dark);">
+          Are you sure you want to remove <strong id="delete-product-name">this product</strong> from your shop?
+        </p>
+        <p style="font-size:0.84rem; color:var(--charcoal-gray); margin-top:6px;">
+          Customers will no longer be able to view or scan to pay for this item.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-delete">Keep Product</button>
+        <button type="button" class="btn btn-primary" id="btn-confirm-delete" style="background-color:#C62828; border-color:#C62828;">
+          Yes, Delete Product
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPI SETTINGS MODAL -->
+  <div class="modal-backdrop" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="modal-card" style="max-width:500px;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="settings-title">Shop UPI Payment Settings</h2>
+        <button type="button" class="modal-close-btn" id="settings-modal-close">✕</button>
+      </div>
+      <form id="settings-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="settings-upi-id" class="form-label">Shop Owner UPI ID</label>
+            <input type="text" id="settings-upi-id" class="form-control" placeholder="e.g. kirtistationary@upi" required>
+            <small style="color:var(--charcoal-gray); font-size:0.78rem;">Customers use this to transfer payment via Google Pay, PhonePe, Paytm, etc.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="settings-phone" class="form-label">Shop Contact / WhatsApp Number</label>
+            <input type="text" id="settings-phone" class="form-control" placeholder="+91 97952 19654">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="settings-modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Settings</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notice Container -->
+  <div id="toast-notice" class="toast-notice" role="alert"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
